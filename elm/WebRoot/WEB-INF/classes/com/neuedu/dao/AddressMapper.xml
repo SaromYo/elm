@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- @author YaoHuiJie -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.dao.AddressMapper">
+	<!-- 结果集映射 -->
+	<resultMap id="addressMap" type="Address">
+        <result property="addressNum" column="addressNum"/>
+        <result property="contactor" column="contactor"/>
+		<result property="contel" column="contel"/>
+		<result property="address" column="address"/>
+        <result property="userNum" column="userNum"/>
+    </resultMap>
+	<!-- 查询记录数 -->
+	<select id="queryCount" parameterType="map" resultType="_int">
+        SELECT count(*) FROM `address`
+    </select>
+	<!-- 查询指定记录 -->
+	<select id="queryList" parameterType="map" resultMap="addressMap">
+        SELECT * FROM `address`, `user` WHERE `address`.`userNum` = #{userNum} AND `address`.`userNum` = `user`.`userNum`
+        <if test="startIndex != null and pageSize != null">
+        	LIMIT #{startIndex}, #{pageSize}
+        </if>
+    </select>
+    <!-- 添加记录 -->
+    <insert id="add" parameterType="Address">
+        INSERT INTO `address` (`addressNum`, `contactor`, `contel`, `address`, `userNum`) VALUES (#{addressNum}, #{contactor} ,#{contel}, #{address}, #{userNum});
+    </insert>
+    <!-- 删除记录 -->
+    <delete id="delete" parameterType="String">
+    	DELETE FROM `address` WHERE `addressNum` = #{addressNum};
+    </delete>
+    <!-- 修改记录 -->
+    <update id="update" parameterType="Address">
+    	UPDATE `address`
+    	<set>
+	    	<if test="contactor != null">
+	    		contactor = #{contactor}
+	    	</if>
+	    	<if test = "contel != null">
+	    		contel = #{contel}
+	    	</if>
+	    	<if test = "address != null">
+	    		address = #{address}
+	    	</if>
+	    	<if test = "userNum != null">
+	    		userNum = #{userNum}
+	    	</if>
+    	</set>
+    	WHERE `addressNum` = #{addressNum};
+    </update>
+</mapper>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- @author YaoHuiJie -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.dao.UserMapper">
+	<!-- 结果集映射 -->
+	<resultMap id="userMap" type="User">
+        <result property="userNum" column="userNum"/>
+        <result property="userName" column="userName"/>
+		<result property="password" column="password"/>
+		<result property="userSex" column="userSex"/>
+        <result property="userTel" column="userTel"/>
+		<result property="level" column="level"/>
+    </resultMap>
+	<!-- 查询记录数 -->
+	<select id="queryCount" parameterType="map" resultType="_int">
+        SELECT count(*) FROM `user`
+    </select>
+	<!-- 查询指定记录 -->
+	<select id="queryList" parameterType="map" resultMap="userMap">
+		<if test="userTel != null">
+	        SELECT * FROM `user` WHERE `userTel` = #{userTel}
+	        <if test="password != null">
+	        	AND `password` = #{password}
+	        </if>
+	        <if test="startIndex != null and pageSize != null">
+	        	LIMIT #{startIndex}, #{pageSize}
+	        </if>
+        </if>
+    </select>
+    <!-- 添加记录 -->
+    <insert id="add" parameterType="User">
+        INSERT INTO `user` (`userNum`, `userName`, `password`, `userSex`, `userTel`, `level`) VALUES (#{userNum}, #{userName} ,#{password}, #{userSex}, #{userTel}, #{level});
+    </insert>
+    <!-- 删除记录 -->
+    <delete id="delete" parameterType="String">
+    	DELETE FROM `user` WHERE `userNum` = #{userNum};
+    </delete>
+    <!-- 修改记录 -->
+    <update id="update" parameterType="User">
+    	UPDATE `user`
+    	<set>
+	    	<if test="userName != null">
+	    		userName = #{userName},
+	    	</if>
+	    	<if test = "password != null">
+	    		password = #{password},
+	    	</if>
+	    	<if test = "userSex != null">
+	    		userSex = #{userSex},
+	    	</if>
+	    	<if test = "userTel != null">
+	    		userTel = #{userTel},
+	    	</if>
+	    	<if test = "level != null">
+	    		level = #{level},
+	    	</if>
+    	</set>
+    	WHERE `userNum` = #{userNum};
+    </update>
+</mapper>

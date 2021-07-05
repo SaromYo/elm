@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- @author YaoHuiJie -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.dao.MerchantMapper">
+	<!-- 结果集映射 -->
+	<resultMap id="merchantMap" type="Merchant">
+        <result property="merNum" column="merNum"/>
+        <result property="merName" column="merName"/>
+		<result property="merKind" column="merKind"/>
+		<result property="merAddress" column="merAddress"/>
+		<result property="sale" column="sale"/>
+        <result property="score" column="score"/>
+    </resultMap>
+	<!-- 查询记录数 -->
+	<select id="queryCount" parameterType="map" resultType="_int">
+        SELECT count(*) FROM `merchant`;
+    </select>
+	<!-- 查询指定记录 -->
+	<select id="queryList" parameterType="map" resultMap="merchantMap">
+        SELECT * FROM `merchant`
+        <if test="startIndex != null and pageSize != null">
+        	LIMIT #{startIndex}, #{pageSize}
+        </if>
+    </select>
+</mapper>
